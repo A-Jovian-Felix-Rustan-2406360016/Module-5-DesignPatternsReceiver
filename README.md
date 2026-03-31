@@ -85,5 +85,8 @@ This is the place for you to write reflections:
 ### Mandatory (Subscriber) Reflections
 
 #### Reflection Subscriber-1
+1. Dalam penggunaan Vec<Notification>, kita menggunakan RwLock untuk alasan efisiensi akses. Jadi, RwLock memperbolehkan banyak thread untuk mengakses data dengan tujuan membaca secara bersamaan selama tidak ada yang sedang menulis. Jika ada yang tiba-tiba ingin menulis atau modifikasi data, maka dia akan lock data tersebut. Selama lock, tidak boleh ada yang akses data tersebut baik untuk read ataupun write. Sedangkan Mutex memiliki aturan yang jauh lebih kaku dimana hanya boleh satu thread saja yang read atau write data dalam satu waktu. Hal ini akan membuat user yang hanya ingin membaca harus antri satu per satu, padahal read sebenarnya tidak memodifikasi data sehingga seharusnya dapat dilakukan secara bersamaan agar efisien. Baik RwLock maupun Mutex memiliki tujuan yang sama yaitu untuk sinkronisasi data agar tidak corrupt.
+
+2. Semua perbedaan ini disebabkan karena alasan memori safety yang didukung Rust. Di Java, kita bisa ubah variabel static karena Java memiliki Garbage Collector dan Java sudah mengasumsikan programmer akan berhati-hati saat menangani thread sehingga diperbolehkan. Namun berbeda dengan Rust, variable static dilarang diubah secara langsung karena variabel tersebut ada selama program tersebut berjalan dan Rust ingin menjamin secara pasti bahwa tidak akan ada dua thread yang mengubah data yang sama dalam satu waktu (Race Condition). Jadi, Rust dari awal sudah mencegah hal itu terjadi, sedangkan Java menyerahkannya ke sisi programmer untuk berhati-hati.
 
 #### Reflection Subscriber-2
